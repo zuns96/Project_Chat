@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Project_Chat/obj/Debug
+/Project_Chat/bin/Debug
