@@ -26,6 +26,7 @@ namespace Project_Chat
 
         private void WinFormChat_Deactivate(object sender, EventArgs e)
         {
+            UserData_Account.Release();
             WindowManager.OpenWindow<WinFormLogin>();
         }
     }

@@ -12,6 +12,7 @@ namespace Project_Chat
     {
         protected override string c_domain_base { get { return "https://localhost:44307/api/{0}"; } }
 
+        #region API
         void send_Req_Member_Check(string strID)
         {
             string api = string.Format(c_domain_base, "auth/memberCheck");
@@ -118,5 +119,6 @@ namespace Project_Chat
                 ChatApplicationContext.Recv_Rpy_SignIn(rpy);
             }
         }
+        #endregion API
     }
 }

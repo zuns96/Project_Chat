@@ -9,16 +9,37 @@ namespace Project_Chat
 {
     public class UserData_Account
     {
+        static UserData_Account s_intance = null;
+
         string m_strID;
-        string m_strPassword;
+
+        static public UserData_Account Instance { get { return s_intance; } }
 
         public string strID { get { return m_strID; } }
-        public string strPassword { get { return m_strPassword; } }
-    
-        public UserData_Account(string strID, string strPassword)
+
+        static public void Create(string strID)
+        {
+            if (s_intance == null)
+                s_intance = new UserData_Account(strID);
+        }
+
+        static public void Release()
+        {
+            if (s_intance != null)
+            {
+                s_intance.release();
+                s_intance = null;
+            }
+        }
+
+        UserData_Account(string strID)
         {
             m_strID = strID;
-            m_strPassword = strPassword;
+        }
+
+        void release()
+        {
+            m_strID = null;
         }
     }
 }
