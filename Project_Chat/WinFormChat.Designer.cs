@@ -36,9 +36,10 @@ namespace Project_Chat
             // 
             // btnSend
             // 
-            this.btnSend.Location = new System.Drawing.Point(651, 343);
+            this.btnSend.Location = new System.Drawing.Point(506, 206);
+            this.btnSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(137, 95);
+            this.btnSend.Size = new System.Drawing.Size(107, 57);
             this.btnSend.TabIndex = 0;
             this.btnSend.Text = "보내기";
             this.btnSend.UseVisualStyleBackColor = true;
@@ -47,31 +48,35 @@ namespace Project_Chat
             // listChatBox
             // 
             this.listChatBox.FormattingEnabled = true;
-            this.listChatBox.ItemHeight = 20;
-            this.listChatBox.Location = new System.Drawing.Point(12, 12);
+            this.listChatBox.ItemHeight = 12;
+            this.listChatBox.Location = new System.Drawing.Point(9, 7);
+            this.listChatBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.listChatBox.Name = "listChatBox";
             this.listChatBox.ScrollAlwaysVisible = true;
-            this.listChatBox.Size = new System.Drawing.Size(776, 324);
+            this.listChatBox.Size = new System.Drawing.Size(604, 196);
             this.listChatBox.TabIndex = 1;
             this.listChatBox.UseTabStops = false;
             // 
             // textMsg
             // 
-            this.textMsg.Location = new System.Drawing.Point(12, 377);
+            this.textMsg.Location = new System.Drawing.Point(9, 226);
+            this.textMsg.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textMsg.Name = "textMsg";
-            this.textMsg.Size = new System.Drawing.Size(633, 26);
+            this.textMsg.Size = new System.Drawing.Size(493, 21);
             this.textMsg.TabIndex = 2;
             // 
-            // Form1
+            // WinFormChat
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(622, 270);
             this.Controls.Add(this.textMsg);
             this.Controls.Add(this.listChatBox);
             this.Controls.Add(this.btnSend);
-            this.Name = "Form1";
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Name = "WinFormChat";
             this.Text = "Form1";
+            this.Deactivate += new System.EventHandler(this.WinFormChat_Deactivate);
             this.ResumeLayout(false);
             this.PerformLayout();
 
