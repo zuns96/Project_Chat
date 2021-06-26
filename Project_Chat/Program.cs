@@ -17,6 +17,7 @@ namespace Project_Chat
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            WebSocketManager.Create();
             NetManager_ASP.Create();
             ChatApplicationContext chatApplicationContext = new ChatApplicationContext(new WinFormLogin());
 

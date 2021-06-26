@@ -7,3 +7,6 @@
 /Project_Chat/bin/Debug
 /Project_Chat/obj/Release
 /packages/Newtonsoft.Json.13.0.1
+/Project_Chat/publish
+/Project_Chat/Project_Chat.csproj.user
+/Project_Chat/Project_Chat_TemporaryKey.pfx

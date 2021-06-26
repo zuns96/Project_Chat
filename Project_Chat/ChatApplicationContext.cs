@@ -38,6 +38,12 @@ namespace Project_Chat
             if (s_instance != null)
                 s_instance.recv_Rpy_SignIn(rpy);
         }
+
+        static public void Recv_Rpy_Chat(string msg)
+        {
+            if (s_instance != null)
+                s_instance.recv_Rpy_Chat(msg);
+        }
         #endregion Static
 
         void init()
@@ -86,6 +92,15 @@ namespace Project_Chat
             if (form != null)
             {
                 form.Recv_Rpy_SignIn(rpy);
+            }
+        }
+
+        void recv_Rpy_Chat(string msg)
+        {
+            WinFormChat form = MainForm as WinFormChat;
+            if (form != null)
+            {
+                form.Recv_Rpy_Chat(msg);
             }
         }
     }

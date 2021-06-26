@@ -44,12 +44,14 @@ namespace Project_Chat
         public void Recv_Rpy_SignUp(Rpy_SignUp rpy)
         {
             UserData_Account.Create(rpy.strUserName);
+            WebSocketManager.Connect();
             WindowManager.OpenWindow<WinFormChat>();
         }
 
         public void Recv_Rpy_SignIn(Rpy_SignIn rpy)
         {
             UserData_Account.Create(rpy.strUserName);
+            WebSocketManager.Connect();
             WindowManager.OpenWindow<WinFormChat>();
         }
     }

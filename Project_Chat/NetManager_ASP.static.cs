@@ -9,14 +9,6 @@ namespace Project_Chat
 {
     public partial class NetManager_ASP
     {
-        static NetManager_ASP s_instance = null;
-
-        static public void Create()
-        {
-            if (s_instance == null)
-                s_instance = new NetManager_ASP();
-        }
-
         static public void Send_Req_Member_Check(string strID)
         {
             if (s_instance != null)

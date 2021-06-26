@@ -56,6 +56,7 @@
     <Compile Include="NetManager_ASP.cs" />
     <Compile Include="NetManager_ASP.static.cs" />
     <Compile Include="UserData_Account.cs" />
+    <Compile Include="WebSocketManager.cs" />
     <Compile Include="WindowManager.cs" />
     <Compile Include="WinFormChat.cs">
       <SubType>Form</SubType>

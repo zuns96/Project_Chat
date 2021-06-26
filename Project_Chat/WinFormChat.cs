@@ -5,8 +5,6 @@ namespace Project_Chat
 {
     public partial class WinFormChat : Form
     {
-        UserData_Account m_user = null;
-
         public WinFormChat()
         {
             InitializeComponent();
@@ -19,7 +17,9 @@ namespace Project_Chat
                 return;
             }
 
-            listChatBox.Items.Add(string.Format("{0} : {1}", m_user.strID, textMsg.Text));
+            string msg = string.Format("{0} : {1}", UserData_Account.Instance.strID, textMsg.Text);
+
+            WebSocketManager.Send_Req_Chat(msg);
 
             textMsg.Text = string.Empty;
         }
@@ -28,6 +28,11 @@ namespace Project_Chat
         {
             UserData_Account.Release();
             WindowManager.OpenWindow<WinFormLogin>();
+        }
+
+        public void Recv_Rpy_Chat(string msg)
+        {
+            Invoke(new Action(() => listChatBox.Items.Add(msg)));
         }
     }
 }
