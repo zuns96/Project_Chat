@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ASPDotNetCore.Models;
+using System;
 using System.Windows.Forms;
 
 namespace Project_Chat
@@ -14,9 +15,7 @@ namespace Project_Chat
         {
             string strID = textBoxID.Text;
             string strPassword = textBoxPassword.Text;
-
-            Console.WriteLine("ID : " + strID + "\nPassword : " + strPassword);
-
+            
             if (string.IsNullOrEmpty(strID))
             {
                 MessageBox.Show("아이디를 입력해주세요.");
@@ -27,11 +26,29 @@ namespace Project_Chat
             }
             else
             {
-                WinFormChat winFormChat = new WinFormChat(strID, strPassword);
-                Program.ApplicartionContext.MainForm = winFormChat;
-                winFormChat.Show();
-                Close();
+                NetManager_ASP.Send_Req_Member_Check(strID);
             }
+        }
+
+        public void Recv_Rpy_MemberCheck(Rpy_MemberCheck rpy)
+        {
+            string strID = textBoxID.Text;
+            string strPassword = textBoxPassword.Text;
+
+            if (rpy.byRet == 1)
+                NetManager_ASP.Send_Req_SignIn(strID, strPassword);
+            else
+                NetManager_ASP.Send_Req_SignUp(strID, strPassword);
+        }
+
+        public void Recv_Rpy_SignUp(Rpy_SignUp rpy)
+        {
+            WindowManager.OpenWindow<WinFormChat>();
+        }
+
+        public void Recv_Rpy_SignIn(Rpy_SignIn rpy)
+        {
+            WindowManager.OpenWindow<WinFormChat>();
         }
     }
 }

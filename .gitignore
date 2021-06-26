@@ -5,3 +5,5 @@
 /.vs
 /Project_Chat/obj/Debug
 /Project_Chat/bin/Debug
+/Project_Chat/obj/Release
+/packages/Newtonsoft.Json.13.0.1

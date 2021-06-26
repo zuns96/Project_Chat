@@ -8,10 +8,6 @@ namespace Project_Chat
 {
     static class Program
     {
-        static ApplicationContext s_applicationContext = null;
-
-        static public ApplicationContext ApplicartionContext { get { return s_applicationContext; } }
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -21,9 +17,10 @@ namespace Project_Chat
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            s_applicationContext = new ApplicationContext(new WinFormLogin());
+            NetManager_ASP.Create();
+            ChatApplicationContext chatApplicationContext = new ChatApplicationContext(new WinFormLogin());
 
-            Application.Run(s_applicationContext);
+            Application.Run(chatApplicationContext);
         }
     }
 }
