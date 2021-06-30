@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using static ASPDotNetCore.WSPacket;
 
 namespace Project_Chat
 {
@@ -12,14 +13,16 @@ namespace Project_Chat
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrEmpty(textMsg.Text))
+            string msg = textMsg.Text;
+            if (string.IsNullOrEmpty(msg))
             {
                 return;
             }
 
-            string msg = string.Format("{0} : {1}", UserData_Account.Instance.strID, textMsg.Text);
-
-            WebSocketManager.Send_Req_Chat(msg);
+            UserData_Account userDataAccount = UserData_Account.Instance;
+            long lUserNo = userDataAccount.lUserNo;
+            string strUserName = userDataAccount.strUserName;
+            WebSocketManager.Send_Req_Chat(lUserNo, strUserName, msg, 0L);
 
             textMsg.Text = string.Empty;
         }
@@ -27,11 +30,14 @@ namespace Project_Chat
         private void WinFormChat_Deactivate(object sender, EventArgs e)
         {
             UserData_Account.Release();
+            WebSocketManager.Disconnect();
             WindowManager.OpenWindow<WinFormLogin>();
         }
 
-        public void Recv_Rpy_Chat(string msg)
+        public void Recv_Rpy_Chat(Rpy_Chat rpy)
         {
+            string msg = string.Format("{0} : {1}", rpy.strSender, rpy.strMsg);
+
             Invoke(new Action(() => listChatBox.Items.Add(msg)));
         }
     }

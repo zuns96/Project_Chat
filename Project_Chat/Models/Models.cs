@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ASPDotNetCore.Models
+﻿namespace ASPDotNetCore.Models
 {
     public class Req_MemberCheck
     {
@@ -24,6 +19,7 @@ namespace ASPDotNetCore.Models
     public class Rpy_SignIn
     {
         public byte byRet { get; set; }
+        public long lUserNo { get; set; }
         public string strUserName { get; set; }
     }
 
@@ -36,6 +32,7 @@ namespace ASPDotNetCore.Models
     public class Rpy_SignUp
     {
         public byte byRet { get; set; }
+        public long lUserNo { get; set; }
         public string strUserName { get; set; }
     }
 }

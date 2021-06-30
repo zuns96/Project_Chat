@@ -27,9 +27,9 @@ namespace Project_Chat
                 s_instance = null;
         }
 
-        protected void WaitForResponse<T>(Task<WebResponse> asyncTask, Action<T> recvFunc) where T : class
+        protected void WaitForResponse<K>(Task<WebResponse> asyncTask, Action<K> recvFunc) where K : class
         {
-            T rpy = null;
+            K rpy = null;
             string json = string.Empty;
             
             isWait = true;
@@ -46,7 +46,7 @@ namespace Project_Chat
                         offset += stream.Read(buffer, offset, 256);
                         json += Encoding.UTF8.GetString(buffer);
                     } while (stream.ReadByte() > 0);
-                    rpy = JsonConvert.DeserializeObject<T>(json);
+                    rpy = JsonConvert.DeserializeObject<K>(json);
                 }
                 else
                 {

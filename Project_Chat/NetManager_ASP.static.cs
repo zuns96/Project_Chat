@@ -1,11 +1,4 @@
-﻿using ASPDotNetCore.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Project_Chat
+﻿namespace Project_Chat
 {
     public partial class NetManager_ASP
     {

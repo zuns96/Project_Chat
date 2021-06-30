@@ -10,7 +10,7 @@ namespace Project_Chat
 {
     public partial class NetManager_ASP : Net<NetManager_ASP>
     {
-        protected override string c_domain_base { get { return "http://zuns96.iptime.org:12502/api/{0}"; } }
+        protected override string c_domain_base { get { return "http://localhost:6038/api/{0}"; } }
 
         #region API
         void send_Req_Member_Check(string strID)

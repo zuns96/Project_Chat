@@ -1,6 +1,7 @@
 ﻿using ASPDotNetCore.Models;
 using System;
 using System.Windows.Forms;
+using static ASPDotNetCore.WSPacket;
 
 namespace Project_Chat
 {
@@ -43,16 +44,29 @@ namespace Project_Chat
 
         public void Recv_Rpy_SignUp(Rpy_SignUp rpy)
         {
-            UserData_Account.Create(rpy.strUserName);
+            long lUserNo = rpy.lUserNo;
+            string strUserName = rpy.strUserName;
+
+            UserData_Account.Create(lUserNo, strUserName);
             WebSocketManager.Connect();
-            WindowManager.OpenWindow<WinFormChat>();
+
+            WebSocketManager.Send_Req_Login(lUserNo, strUserName);
         }
 
         public void Recv_Rpy_SignIn(Rpy_SignIn rpy)
         {
-            UserData_Account.Create(rpy.strUserName);
+            long lUserNo = rpy.lUserNo;
+            string strUserName = rpy.strUserName;
+
+            UserData_Account.Create(lUserNo, strUserName);
             WebSocketManager.Connect();
-            WindowManager.OpenWindow<WinFormChat>();
+
+            WebSocketManager.Send_Req_Login(lUserNo, strUserName);
+        }
+
+        public void Recv_Rpy_Login(Rpy_Login rpy)
+        {
+            Invoke(new Action(() => { WindowManager.OpenWindow<WinFormChat>(); }));
         }
     }
 }

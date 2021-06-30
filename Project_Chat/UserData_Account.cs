@@ -11,16 +11,18 @@ namespace Project_Chat
     {
         static UserData_Account s_intance = null;
 
-        string m_strID;
+        long m_lUserNo;
+        string m_strUserName;
 
         static public UserData_Account Instance { get { return s_intance; } }
 
-        public string strID { get { return m_strID; } }
+        public long lUserNo { get { return m_lUserNo; } }
+        public string strUserName { get { return m_strUserName; } }
 
-        static public void Create(string strID)
+        static public void Create(long lUserNo, string strUserName)
         {
             if (s_intance == null)
-                s_intance = new UserData_Account(strID);
+                s_intance = new UserData_Account(lUserNo, strUserName);
         }
 
         static public void Release()
@@ -32,14 +34,15 @@ namespace Project_Chat
             }
         }
 
-        UserData_Account(string strID)
+        UserData_Account(long lUserNo, string strUserName)
         {
-            m_strID = strID;
+            m_lUserNo = lUserNo;
+            m_strUserName = strUserName;
         }
 
         void release()
         {
-            m_strID = null;
+            m_strUserName = null;
         }
     }
 }
