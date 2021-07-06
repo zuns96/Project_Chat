@@ -14,6 +14,9 @@ namespace Project_Chat
         [STAThread]
         static void Main()
         {
+            TimeManager.Create();
+            Log.Create();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

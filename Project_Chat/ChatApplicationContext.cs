@@ -1,16 +1,18 @@
-﻿using ASPDotNetCore.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static ASPDotNetCore.WSPacket;
+using static ASPDotNetCore.ASPPacket;
 
 namespace Project_Chat
 {
     class ChatApplicationContext : ApplicationContext
     {
+        static public Form mainForm { get { return s_instance == null ? null : s_instance.MainForm; } }
+
         static ChatApplicationContext s_instance = null;
 
         #region Constructor

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ASPDotNetCore.Models;
 using System.Net.WebSockets;
 using Newtonsoft.Json;
 using static ASPDotNetCore.WSPacket;
@@ -43,12 +40,11 @@ namespace Project_Chat
             ConnectWebSocketClient();
             while(m_clientWebSocket.State != WebSocketState.Open)
             {
-                Console.WriteLine("웹 소켓 연결 중");
+                Log.Write("웹 소켓 연결 중...");
                 Thread.Sleep(100);
             }
 
-            Task t = new Task(ProcessWebSocketClient);
-            t.Start();
+            ProcessWebSocketClient();
         }
 
         void disconnect()
@@ -56,15 +52,17 @@ namespace Project_Chat
             m_clientWebSocket.CloseAsync(WebSocketCloseStatus.Empty, string.Empty, CancellationToken.None).Wait();
             m_clientWebSocket.Dispose();
             m_clientWebSocket = null;
+            Log.Write("웹 소켓 연결 중지");
         }
 
         private void ConnectWebSocketClient()
         {
             Uri serverUri = new Uri(c_domain_base);
+            Log.Write("웹 소켓 연결 시작, webScoketServer : {0}", serverUri.AbsoluteUri);
             m_clientWebSocket.ConnectAsync(serverUri, CancellationToken.None).ContinueWith((task) =>
             {
                 if(m_clientWebSocket.State == WebSocketState.Open)
-                    Console.WriteLine("웹 소켓 연결 완료");
+                    Log.Write("웹 소켓 연결 완료...");
             });
         }
 
@@ -95,7 +93,7 @@ namespace Project_Chat
                 }
             }
 
-            Console.WriteLine("웹 소켓 프로세스 종료");
+            Log.Write("웹 소켓 프로세스 종료");
         }
 
         static public void Send_Req_Login(long lUserNo, string strUserName)
@@ -106,6 +104,8 @@ namespace Project_Chat
 
         void send_Req_Login(long lUserNo, string strUserName)
         {
+            Log.Write("Send_Req_Login({0},{1}) 시작 --------->>", lUserNo, strUserName);
+
             Req_Login req = new Req_Login();
             req.lUserNo = lUserNo;
             req.strUserName = strUserName;
@@ -118,6 +118,7 @@ namespace Project_Chat
             packet.strJson = json;
 
             Send(packet);
+            Log.Write("Send_Req_Login 끝 <<---------");
         }
 
         static public void Send_Req_Chat(long lUserNo, string strUserName, string strMsg, long lTimeStamp)
@@ -128,6 +129,8 @@ namespace Project_Chat
 
         void send_Req_Chat(long lUserNo, string strUserName, string strMsg, long lTimeStamp)
         {
+            Log.Write("Send_Req_Login({0},{1},{2},{3}) 시작 --------->>", lUserNo, strUserName, strMsg, lTimeStamp);
+
             Req_Chat req = new Req_Chat();
             req.lUserNo = lUserNo;
             req.strSender = strUserName;
@@ -142,16 +145,14 @@ namespace Project_Chat
             packet.strJson = json;
 
             Send(packet);
+            Log.Write("Send_Req_Chat 끝 <<---------");
         }
 
         void Send(Packet packet)
         {
             string json = JsonConvert.SerializeObject(packet);
             ArraySegment<byte> buffer = new ArraySegment<byte>(Encoding.UTF8.GetBytes(json));
-            m_clientWebSocket.SendAsync(buffer, WebSocketMessageType.Binary, true, CancellationToken.None).ContinueWith((task) =>
-            {
-
-            });
+            m_clientWebSocket.SendAsync(buffer, WebSocketMessageType.Binary, true, CancellationToken.None).Wait();
         }
     }
 }

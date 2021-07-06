@@ -22,7 +22,8 @@ namespace Project_Chat
             UserData_Account userDataAccount = UserData_Account.Instance;
             long lUserNo = userDataAccount.lUserNo;
             string strUserName = userDataAccount.strUserName;
-            WebSocketManager.Send_Req_Chat(lUserNo, strUserName, msg, 0L);
+            long lTimeStamp = TimeManager.TimeStamp;
+            WebSocketManager.Send_Req_Chat(lUserNo, strUserName, msg, lTimeStamp);
 
             textMsg.Text = string.Empty;
         }
@@ -38,7 +39,7 @@ namespace Project_Chat
         {
             string msg = string.Format("{0} : {1}", rpy.strSender, rpy.strMsg);
 
-            Invoke(new Action(() => listChatBox.Items.Add(msg)));
+            listChatBox.Items.Add(msg);
         }
     }
 }

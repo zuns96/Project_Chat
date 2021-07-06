@@ -50,11 +50,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChatApplicationContext.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Models\HelloWorld.cs" />
-    <Compile Include="Models\Models.cs" />
+    <Compile Include="ASPPacket.cs" />
     <Compile Include="Net.cs" />
     <Compile Include="NetManager_ASP.cs" />
     <Compile Include="NetManager_ASP.static.cs" />
+    <Compile Include="TimeManager.cs" />
     <Compile Include="UserData_Account.cs" />
     <Compile Include="WebSocketManager.cs" />
     <Compile Include="WindowManager.cs" />

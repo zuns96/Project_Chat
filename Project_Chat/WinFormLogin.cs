@@ -2,6 +2,7 @@
 using System;
 using System.Windows.Forms;
 using static ASPDotNetCore.WSPacket;
+using static ASPDotNetCore.ASPPacket;
 
 namespace Project_Chat
 {
@@ -27,7 +28,7 @@ namespace Project_Chat
             }
             else
             {
-                NetManager_ASP.Send_Req_Member_Check(strID);
+                NetManager_ASP.Send_Req_MemberCheck(strID);
             }
         }
 
@@ -66,7 +67,7 @@ namespace Project_Chat
 
         public void Recv_Rpy_Login(Rpy_Login rpy)
         {
-            Invoke(new Action(() => { WindowManager.OpenWindow<WinFormChat>(); }));
+            WindowManager.OpenWindow<WinFormChat>();
         }
     }
 }
