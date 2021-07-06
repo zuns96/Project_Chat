@@ -68,11 +68,23 @@ namespace Project_Chat
 
         private async void ProcessWebSocketClient()
         {
-            while(m_clientWebSocket.State == WebSocketState.Open)
+            ArraySegment<byte> buffer = new ArraySegment<byte>(new byte[1024 * 1024 * 10]);
+            WebSocketReceiveResult result = null;
+            while (m_clientWebSocket.State == WebSocketState.Open)
             {
-                ArraySegment<byte> buffer = new ArraySegment<byte>(new byte[1024 * 1024 * 10]);
-                WebSocketReceiveResult result = await m_clientWebSocket.ReceiveAsync(buffer, CancellationToken.None);
-                
+                try
+                {
+                    result = await m_clientWebSocket.ReceiveAsync(buffer, CancellationToken.None);
+                }
+                catch (Exception ex)
+                {
+                    Log.Write("#### Exception!!! THROWN ####");
+                    Log.Write(ex.Message);
+                    Log.Write(ex.StackTrace);
+                    Log.Write("#### Exception!!! THROWN ####");
+                    continue;
+                }
+
                 string json = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
 
                 Packet packet = JsonConvert.DeserializeObject<Packet>(json);
@@ -94,6 +106,8 @@ namespace Project_Chat
             }
 
             Log.Write("웹 소켓 프로세스 종료");
+
+            WindowManager.OpenWindow<WinFormLogin>();
         }
 
         static public void Send_Req_Login(long lUserNo, string strUserName)
