@@ -65,7 +65,6 @@ namespace Project_Chat
         private Form openWindow(Type type)
         {
             Form form = Activator.CreateInstance(type) as Form;
-            Log.Write("Create Form {0}", type.Name);
             m_changeMainFormEvent(form);
             return form;
         }

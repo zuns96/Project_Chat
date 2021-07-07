@@ -52,22 +52,9 @@ namespace Project_Chat
             webRequest.Credentials = CredentialCache.DefaultCredentials;
             webRequest.ContentType = "application/json";
 
-            try
+            if (!SetPostData(webRequest, buffer))
             {
-                // Post 데이터 세팅 -->>
-                Stream requestStrream = webRequest.GetRequestStream();
-                requestStrream.Write(buffer, 0, buffer.Length);
-                requestStrream.Close();
-                // Post 데이터 세팅 <<--
-            }
-            catch(Exception ex)
-            {
-                Log.Write("#### Exception!!! THROWN ####");
-                Log.Write(ex.Message);
-                Log.Write("StackTrace :\n" + ex.StackTrace);
-                Log.Write("#### Exception!!! THROWN ####");
-
-                ErrorMessage_Common(0);
+                Log.Write("포스트 데이터 세팅 실패!");
                 return;
             }
             // Request Data 만들기 <<--
@@ -130,22 +117,9 @@ namespace Project_Chat
             webRequest.Credentials = CredentialCache.DefaultCredentials;
             webRequest.ContentType = "application/json";
 
-            try
+            if (!SetPostData(webRequest, buffer))
             {
-                // Post 데이터 세팅 -->>
-                Stream requestStrream = webRequest.GetRequestStream();
-                requestStrream.Write(buffer, 0, buffer.Length);
-                requestStrream.Close();
-                // Post 데이터 세팅 <<--
-            }
-            catch (Exception ex)
-            {
-                Log.Write("#### Exception!!! THROWN ####");
-                Log.Write(ex.Message);
-                Log.Write("StackTrace :\n" + ex.StackTrace);
-                Log.Write("#### Exception!!! THROWN ####");
-
-                ErrorMessage_Common(0);
+                Log.Write("포스트 데이터 세팅 실패!");
                 return;
             }
             // Request Data 만들기 <<--
@@ -209,22 +183,9 @@ namespace Project_Chat
             webRequest.Credentials = CredentialCache.DefaultCredentials;
             webRequest.ContentType = "application/json";
 
-            try
+            if(!SetPostData(webRequest, buffer))
             {
-                // Post 데이터 세팅 -->>
-                Stream requestStrream = webRequest.GetRequestStream();
-                requestStrream.Write(buffer, 0, buffer.Length);
-                requestStrream.Close();
-                // Post 데이터 세팅 <<--
-            }
-            catch (Exception ex)
-            {
-                Log.Write("#### Exception!!! THROWN ####");
-                Log.Write(ex.Message);
-                Log.Write("StackTrace :\n" + ex.StackTrace);
-                Log.Write("#### Exception!!! THROWN ####");
-
-                ErrorMessage_Common(0);
+                Log.Write("포스트 데이터 세팅 실패!");
                 return;
             }
             // Request Data 만들기 <<--
@@ -268,20 +229,28 @@ namespace Project_Chat
         }
         #endregion API
 
-        void Request<TPacketType>(WebRequest webRequest, Action<TPacketType> recvFunc) where TPacketType : class
+        bool SetPostData(WebRequest request, byte[] postParam)
         {
             try
             {
-                Task<WebResponse> asyncTask = webRequest.GetResponseAsync();
-                WaitForResponse<TPacketType>(asyncTask, recvFunc);
+                // Post 데이터 세팅 -->>
+                Stream requestStrream = request.GetRequestStream();
+                requestStrream.Write(postParam, 0, postParam.Length);
+                requestStrream.Close();
+                // Post 데이터 세팅 <<--
             }
             catch (Exception ex)
             {
                 Log.Write("#### Exception!!! THROWN ####");
                 Log.Write(ex.Message);
-                Log.Write(ex.StackTrace);
+                Log.Write("StackTrace :\n" + ex.StackTrace);
                 Log.Write("#### Exception!!! THROWN ####");
+
+                ErrorMessage_Common(0);
+                return false;
             }
+
+            return true;
         }
     }
 }

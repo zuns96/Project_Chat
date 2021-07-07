@@ -49,9 +49,9 @@ namespace Project_Chat
             string strUserName = rpy.strUserName;
 
             UserData_Account.Create(lUserNo, strUserName);
-            WebSocketManager.Connect();
+            NetManager_WS.Connect();
 
-            WebSocketManager.Send_Req_Login(lUserNo, strUserName);
+            NetManager_WS.Send_Req_Login(lUserNo, strUserName);
         }
 
         public void Recv_Rpy_SignIn(Rpy_SignIn rpy)
@@ -60,9 +60,9 @@ namespace Project_Chat
             string strUserName = rpy.strUserName;
 
             UserData_Account.Create(lUserNo, strUserName);
-            WebSocketManager.Connect();
+            NetManager_WS.Connect();
 
-            WebSocketManager.Send_Req_Login(lUserNo, strUserName);
+            NetManager_WS.Send_Req_Login(lUserNo, strUserName);
         }
 
         public void Recv_Rpy_Login(Rpy_Login rpy)

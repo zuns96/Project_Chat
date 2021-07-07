@@ -23,7 +23,7 @@ namespace Project_Chat
             long lUserNo = userDataAccount.lUserNo;
             string strUserName = userDataAccount.strUserName;
             long lTimeStamp = TimeManager.TimeStamp;
-            WebSocketManager.Send_Req_Chat(lUserNo, strUserName, msg, lTimeStamp);
+            NetManager_WS.Send_Req_Chat(lUserNo, strUserName, msg, lTimeStamp);
 
             textMsg.Text = string.Empty;
         }
@@ -31,7 +31,7 @@ namespace Project_Chat
         private void WinFormChat_Deactivate(object sender, EventArgs e)
         {
             UserData_Account.Release();
-            WebSocketManager.Disconnect();
+            NetManager_WS.Disconnect();
             WindowManager.OpenWindow<WinFormLogin>();
         }
 

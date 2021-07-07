@@ -45,12 +45,13 @@ namespace Project_Chat
                 m_textWriter = null;
             }
 
-            string fileName = string.Format("{0}_{1}.txt", AppDomain.CurrentDomain.FriendlyName, TimeManager.GetNowTimeString(false, "yyyy/MM/dd_HH;mm;ss"));
-            string dir = @".\Log";
-            string filePath = string.Format(@"{0}\{1}", dir, fileName);
+            string fileName = string.Format("{0}_{1}.txt", AppDomain.CurrentDomain.FriendlyName, TimeManager.GetNowTimeString(false, "yyyy-MM-dd_HH;mm;ss"));
+            string dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @".\Log");
+            string filePath = Path.Combine(dir, fileName);
+            DirectoryInfo dirInfo = new DirectoryInfo(dir);
 
-            if (!Directory.Exists(dir))
-                Directory.CreateDirectory(dir);
+            if (!dirInfo.Exists)
+                dirInfo.Create();
 
             FileStream stream = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read);
             m_textWriter = new StreamWriter(stream, Encoding.UTF8);
@@ -65,14 +66,11 @@ namespace Project_Chat
 
                 Console.WriteLine(log);
 
-                lock (m_objLock)
-                {
-                    m_textWriter.WriteLine(log);
+                m_textWriter.WriteLine(log);
 
-                    if(m_textWriter.BaseStream.Length >= c_MAX_SIZE)
-                    {
-                        createLogFile();
-                    }
+                if(m_textWriter.BaseStream.Length >= c_MAX_SIZE)
+                {
+                    createLogFile();
                 }
             }
         }

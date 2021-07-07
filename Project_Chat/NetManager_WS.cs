@@ -31,7 +31,7 @@ namespace Project_Chat
                 s_instance.disconnect();
         }
 
-        void connect()
+        private void connect()
         {
             m_clientWebSocket = new ClientWebSocket();
             ClientWebSocketOptions webSocketOptions = m_clientWebSocket.Options;
@@ -47,7 +47,7 @@ namespace Project_Chat
             ProcessWebSocketClient();
         }
 
-        void disconnect()
+        private void disconnect()
         {
             m_clientWebSocket.CloseAsync(WebSocketCloseStatus.Empty, string.Empty, CancellationToken.None).Wait();
             m_clientWebSocket.Dispose();
@@ -110,12 +110,6 @@ namespace Project_Chat
             WindowManager.OpenWindow<WinFormLogin>();
         }
 
-        static public void Send_Req_Login(long lUserNo, string strUserName)
-        {
-            if (s_instance != null)
-                s_instance.send_Req_Login(lUserNo, strUserName);
-        }
-
         void send_Req_Login(long lUserNo, string strUserName)
         {
             Log.Write("Send_Req_Login({0},{1}) 시작 --------->>", lUserNo, strUserName);
@@ -133,12 +127,6 @@ namespace Project_Chat
 
             Send(packet);
             Log.Write("Send_Req_Login 끝 <<---------");
-        }
-
-        static public void Send_Req_Chat(long lUserNo, string strUserName, string strMsg, long lTimeStamp)
-        {
-            if (s_instance != null)
-                s_instance.send_Req_Chat(lUserNo, strUserName, strMsg, lTimeStamp);
         }
 
         void send_Req_Chat(long lUserNo, string strUserName, string strMsg, long lTimeStamp)
