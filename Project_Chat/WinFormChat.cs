@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
+using static ASPDotNetCore.WSPacket;
 
 namespace Project_Chat
 {
     public partial class WinFormChat : Form
     {
-        UserData_Account m_user = null;
-
         public WinFormChat()
         {
             InitializeComponent();
@@ -14,19 +13,33 @@ namespace Project_Chat
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrEmpty(textMsg.Text))
+            string msg = textMsg.Text;
+            if (string.IsNullOrEmpty(msg))
             {
                 return;
             }
 
-            listChatBox.Items.Add(string.Format("{0} : {1}", m_user.strID, textMsg.Text));
+            UserData_Account userDataAccount = UserData_Account.Instance;
+            long lUserNo = userDataAccount.lUserNo;
+            string strUserName = userDataAccount.strUserName;
+            long lTimeStamp = TimeManager.TimeStamp;
+            NetManager_WS.Send_Req_Chat(lUserNo, strUserName, msg, lTimeStamp);
 
             textMsg.Text = string.Empty;
         }
 
         private void WinFormChat_Deactivate(object sender, EventArgs e)
         {
+            UserData_Account.Release();
+            NetManager_WS.Disconnect();
             WindowManager.OpenWindow<WinFormLogin>();
+        }
+
+        public void Recv_Rpy_Chat(Rpy_Chat rpy)
+        {
+            string msg = string.Format("{0} : {1}", rpy.strSender, rpy.strMsg);
+
+            listChatBox.Items.Add(msg);
         }
     }
 }

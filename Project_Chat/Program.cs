@@ -14,9 +14,13 @@ namespace Project_Chat
         [STAThread]
         static void Main()
         {
+            TimeManager.Create();
+            Log.Create();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            NetManager_WS.Create();
             NetManager_ASP.Create();
             ChatApplicationContext chatApplicationContext = new ChatApplicationContext(new WinFormLogin());
 

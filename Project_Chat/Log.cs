@@ -1,0 +1,78 @@
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Threading;
+
+namespace Project_Chat
+{
+    public class Log
+    {
+        const int c_MAX_SIZE = 1024 * 1024 * 500;  // 500 MB
+
+        static Log s_instance = null;
+
+        StreamWriter m_textWriter = null;
+        object m_objLock = null;
+
+        static public void Create()
+        {
+            if (s_instance == null)
+                s_instance = new Log();
+        }
+
+        static public void Write(string format, params object[] param)
+        {
+            Write(string.Format(format, param));
+        }
+
+        static public void Write(string msg)
+        {
+            if (s_instance != null)
+                s_instance.write(msg);
+        }
+
+        public Log()
+        {
+            m_objLock = new object();
+            createLogFile();
+        }
+
+        void createLogFile()
+        {
+            if(m_textWriter != null)
+            {
+                m_textWriter.Dispose();
+                m_textWriter = null;
+            }
+
+            string fileName = string.Format("{0}_{1}.txt", AppDomain.CurrentDomain.FriendlyName, TimeManager.GetNowTimeString(false, "yyyy-MM-dd_HH;mm;ss"));
+            string dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @".\Log");
+            string filePath = Path.Combine(dir, fileName);
+            DirectoryInfo dirInfo = new DirectoryInfo(dir);
+
+            if (!dirInfo.Exists)
+                dirInfo.Create();
+
+            FileStream stream = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read);
+            m_textWriter = new StreamWriter(stream, Encoding.UTF8);
+            m_textWriter.AutoFlush = true;
+        }
+
+        void write(string msg)
+        {
+            lock (m_objLock)
+            {
+                string log = string.Format("[{0}] : ({1}){2}", TimeManager.GetNowTimeString(false), Thread.CurrentThread.ManagedThreadId, msg);
+
+                Console.WriteLine(log);
+
+                m_textWriter.WriteLine(log);
+
+                if(m_textWriter.BaseStream.Length >= c_MAX_SIZE)
+                {
+                    createLogFile();
+                }
+            }
+        }
+    }
+}

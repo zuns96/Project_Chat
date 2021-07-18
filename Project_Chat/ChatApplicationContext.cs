@@ -1,15 +1,18 @@
-﻿using ASPDotNetCore.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static ASPDotNetCore.WSPacket;
+using static ASPDotNetCore.ASPPacket;
 
 namespace Project_Chat
 {
     class ChatApplicationContext : ApplicationContext
     {
+        static public Form mainForm { get { return s_instance == null ? null : s_instance.MainForm; } }
+
         static ChatApplicationContext s_instance = null;
 
         #region Constructor
@@ -37,6 +40,18 @@ namespace Project_Chat
         {
             if (s_instance != null)
                 s_instance.recv_Rpy_SignIn(rpy);
+        }
+
+        static public void Recv_Rpy_Login(Rpy_Login rpy)
+        {
+            if (s_instance != null)
+                s_instance.recv_Rpy_Login(rpy);
+        }
+
+        static public void Recv_Rpy_Chat(Rpy_Chat rpy)
+        {
+            if (s_instance != null)
+                s_instance.recv_Rpy_Chat(rpy);
         }
         #endregion Static
 
@@ -86,6 +101,24 @@ namespace Project_Chat
             if (form != null)
             {
                 form.Recv_Rpy_SignIn(rpy);
+            }
+        }
+
+        void recv_Rpy_Login(Rpy_Login rpy)
+        {
+            WinFormLogin form = MainForm as WinFormLogin;
+            if(form != null)
+            {
+                form.Recv_Rpy_Login(rpy);
+            }
+        }
+
+        void recv_Rpy_Chat(Rpy_Chat rpy)
+        {
+            WinFormChat form = MainForm as WinFormChat;
+            if (form != null)
+            {
+                form.Recv_Rpy_Chat(rpy);
             }
         }
     }

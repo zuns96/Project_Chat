@@ -37,7 +37,7 @@ namespace Project_Chat
             // btnSend
             // 
             this.btnSend.Location = new System.Drawing.Point(506, 206);
-            this.btnSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSend.Margin = new System.Windows.Forms.Padding(2);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(107, 57);
             this.btnSend.TabIndex = 0;
@@ -50,7 +50,7 @@ namespace Project_Chat
             this.listChatBox.FormattingEnabled = true;
             this.listChatBox.ItemHeight = 12;
             this.listChatBox.Location = new System.Drawing.Point(9, 7);
-            this.listChatBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.listChatBox.Margin = new System.Windows.Forms.Padding(2);
             this.listChatBox.Name = "listChatBox";
             this.listChatBox.ScrollAlwaysVisible = true;
             this.listChatBox.Size = new System.Drawing.Size(604, 196);
@@ -60,7 +60,7 @@ namespace Project_Chat
             // textMsg
             // 
             this.textMsg.Location = new System.Drawing.Point(9, 226);
-            this.textMsg.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textMsg.Margin = new System.Windows.Forms.Padding(2);
             this.textMsg.Name = "textMsg";
             this.textMsg.Size = new System.Drawing.Size(493, 21);
             this.textMsg.TabIndex = 2;
@@ -73,10 +73,9 @@ namespace Project_Chat
             this.Controls.Add(this.textMsg);
             this.Controls.Add(this.listChatBox);
             this.Controls.Add(this.btnSend);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "WinFormChat";
             this.Text = "Form1";
-            this.Deactivate += new System.EventHandler(this.WinFormChat_Deactivate);
             this.ResumeLayout(false);
             this.PerformLayout();
 
