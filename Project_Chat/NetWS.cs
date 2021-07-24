@@ -10,7 +10,7 @@ namespace Project_Chat
 {
     public class NetWS : Net<NetWS>
     {
-        protected override string c_domain_base { get { return "ws://localhost:6038/ws"; } }
+        protected override string c_domain_base { get { return "ws://127.0.0.1:12502/ws"; } }
 
         ClientWebSocket m_clientWebSocket = null;
 
@@ -91,6 +91,14 @@ namespace Project_Chat
                 {
                     result = await m_clientWebSocket.ReceiveAsync(buffer, CancellationToken.None);
                 }
+                catch (WebSocketException ex)
+                {
+                    Log.Write("#### Exception!!! THROWN ####");
+                    Log.Write(ex.Message);
+                    Log.Write(ex.StackTrace);
+                    Log.Write("#### Exception!!! THROWN ####");
+                    continue;
+                }
                 catch (Exception ex)
                 {
                     Log.Write("#### Exception!!! THROWN ####");
@@ -157,7 +165,7 @@ namespace Project_Chat
 
         void do_recv_rpy_chat(Rpy_Chat rpy)
         {
-            Log.Write("do_recv_rpy_login -------->>");
+            Log.Write("do_recv_rpy_chat -------->>");
 
             Log.Write("byRet({0}),lUserNo({1}),strSender({2}),strMsg({3}),lTimeStamp({4})",
                 rpy.byRet,
@@ -168,7 +176,7 @@ namespace Project_Chat
 
             NetManager_WS.Recv_Rpy_Chat(rpy);
 
-            Log.Write("do_recv_rpy_login <<--------");
+            Log.Write("do_recv_rpy_chat <<--------");
         }
     }
 }

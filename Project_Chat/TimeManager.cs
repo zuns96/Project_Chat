@@ -29,7 +29,7 @@ namespace Project_Chat
         static public string GetNowTimeString(bool isUTC, string format = "yyyy/MM/dd HH:mm:ss.ffff")
         {
             if (s_instance != null)
-                s_instance = null;
+                s_instance.getNowTimeString(isUTC, format);
 
             return isUTC ? DateTime.UtcNow.ToString(format) : DateTime.Now.ToString(format);
         }

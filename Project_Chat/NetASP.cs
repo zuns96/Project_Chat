@@ -16,7 +16,7 @@ namespace Project_Chat
 
         private RecvResponse m_delegate = null;
 
-        protected override string c_domain_base { get { return "http://localhost:6038{0}"; } }
+        protected override string c_domain_base { get { return "http://127.0.0.1:12502{0}"; } }
 
         public NetASP() : base()
         {

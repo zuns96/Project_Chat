@@ -98,7 +98,7 @@ namespace Project_Chat
 
         void send_Req_Chat(long lUserNo, string strUserName, string strMsg, long lTimeStamp)
         {
-            Log.Write("Send_Req_Login({0},{1},{2},{3}) 시작 --------->>", lUserNo, strUserName, strMsg, lTimeStamp);
+            Log.Write("Send_Req_Chat({0},{1},{2},{3}) 시작 --------->>", lUserNo, strUserName, strMsg, lTimeStamp);
 
             Req_Chat req = new Req_Chat();
             req.lUserNo = lUserNo;
