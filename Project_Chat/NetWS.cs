@@ -64,9 +64,12 @@ namespace Project_Chat
 
         private void disconnect()
         {
-            m_clientWebSocket.CloseAsync(WebSocketCloseStatus.Empty, string.Empty, CancellationToken.None).Wait();
+            if (m_clientWebSocket != null && m_clientWebSocket.State == WebSocketState.Open)
+            {
+                m_clientWebSocket.CloseAsync(WebSocketCloseStatus.Empty, string.Empty, CancellationToken.None).Wait();
 
-            Log.Write("웹 소켓 연결 중지");
+                Log.Write("웹 소켓 연결 중지");
+            }
         }
 
         private void ConnectWebSocketClient()
