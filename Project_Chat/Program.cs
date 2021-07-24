@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Project_Chat
@@ -20,8 +17,8 @@ namespace Project_Chat
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            NetManager_WS.Create();
-            NetManager_ASP.Create();
+            NetWS.Create();
+            NetASP.Create();
             ChatApplicationContext chatApplicationContext = new ChatApplicationContext(new WinFormLogin());
 
             Application.Run(chatApplicationContext);

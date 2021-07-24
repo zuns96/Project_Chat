@@ -1,9 +1,6 @@
-﻿using ASPDotNetCore;
-using System;
+﻿using System;
 using System.Net;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -11,10 +8,38 @@ using static ASPDotNetCore.ASPPacket;
 
 namespace Project_Chat
 {
-    public partial class NetManager_ASP : Net<NetManager_ASP>
+    public partial class NetManager_ASP : Singleton<NetManager_ASP>
     {
-        protected override string c_domain_base { get { return "http://localhost:6038/api/{0}"; } }
+        public delegate void RequestFunc(WebRequest model);
 
+        RequestFunc m_requestFunc = null;
+
+        enum EHTTP_METHOD
+        {
+            GET = 0,
+            POST,
+            PUT,
+            DELETE,
+        }
+        readonly string[] r_method = { "GET", "POST" };
+
+        readonly string r_domain = null;
+        const string c_contentType = "application/json";
+
+        public NetManager_ASP() : base()
+        {
+            r_domain = NetASP.Domain;
+        }
+
+        void addListener_RequestFunc(RequestFunc func)
+        {
+            m_requestFunc += func;
+        }
+
+        void removeListener_RequestFunc(RequestFunc func)
+        {
+            m_requestFunc -= func;
+        }
 
         void ErrorMessage_Common(byte byRet)
         {
@@ -36,7 +61,7 @@ namespace Project_Chat
         void send_Req_MemberCheck(string strID)
         {
             Log.Write("Send_Req_MemberCheck 시작 --------->>");
-            string api = string.Format(c_domain_base, "auth/memberCheck");
+            string api = APIDefine.API_MEMBER_CHECK;
             Log.Write("api:{0}({1})", api, strID);
 
             // Request Data 만들기 -->>
@@ -44,22 +69,16 @@ namespace Project_Chat
             { 
                 strID = strID, 
             };
-            string json = JsonConvert.SerializeObject(req);
-            byte[] buffer = Encoding.UTF8.GetBytes(json);
 
-            WebRequest webRequest = WebRequest.Create(api);
-            webRequest.Method = "POST";
-            webRequest.Credentials = CredentialCache.DefaultCredentials;
-            webRequest.ContentType = "application/json";
-
-            if (!SetPostData(webRequest, buffer))
+            WebRequest webRequest = CreateWebRequest(api, EHTTP_METHOD.POST, req);
+            if (webRequest == null)
             {
-                Log.Write("포스트 데이터 세팅 실패!");
+                Log.Write("WebRequest({0}({1})) 생성 실패", api, req.ToString());
                 return;
             }
             // Request Data 만들기 <<--
 
-            Request<Rpy_MemberCheck>(webRequest, recv_Rpy_MemberCheck);
+            m_requestFunc(webRequest);
             Log.Write("Send_Req_MemberCheck 끝 <<---------");
         }
 
@@ -100,7 +119,7 @@ namespace Project_Chat
         void send_Req_SignUp(string strID, string strPassword)
         {
             Log.Write("Send_Req_SignUp 시작 --------->>");
-            string api = string.Format(c_domain_base, "auth/signUp");
+            string api = APIDefine.API_SIGNUP;
             Log.Write("api:{0}({1},{2})", api, strID, strPassword);
 
             // Request Data 만들기 -->>
@@ -109,22 +128,16 @@ namespace Project_Chat
                 strID = strID,
                 strPassword = strPassword,
             };
-            string json = JsonConvert.SerializeObject(req);
-            byte[] buffer = Encoding.UTF8.GetBytes(json);
 
-            WebRequest webRequest = WebRequest.Create(api);
-            webRequest.Method = "POST";
-            webRequest.Credentials = CredentialCache.DefaultCredentials;
-            webRequest.ContentType = "application/json";
-
-            if (!SetPostData(webRequest, buffer))
+            WebRequest webRequest = CreateWebRequest(api, EHTTP_METHOD.POST, req);
+            if (webRequest == null)
             {
-                Log.Write("포스트 데이터 세팅 실패!");
+                Log.Write("WebRequest({0}({1})) 생성 실패", api, req.ToString());
                 return;
             }
             // Request Data 만들기 <<--
 
-            Request<Rpy_SignUp>(webRequest, recv_Rpy_SignUp);
+            m_requestFunc(webRequest);
             Log.Write("Send_Req_SignUp 끝 <<---------");
         }
 
@@ -165,7 +178,7 @@ namespace Project_Chat
         void send_Req_SignIn(string strID, string strPassword)
         {
             Log.Write("Send_Req_SignIn 시작 --------->>");
-            string api = string.Format(c_domain_base, "auth/signIn");
+            string api = APIDefine.API_SIGNIN;
             Log.Write("api:{0}({1},{2})", api, strID, strPassword);
 
             // Request Data 만들기 -->>
@@ -174,23 +187,17 @@ namespace Project_Chat
                 strID = strID,
                 strPassword = strPassword,
             };
-            
-            string json = JsonConvert.SerializeObject(req);
-            byte[] buffer = Encoding.UTF8.GetBytes(json);
 
-            WebRequest webRequest = WebRequest.Create(api);
-            webRequest.Method = "POST";
-            webRequest.Credentials = CredentialCache.DefaultCredentials;
-            webRequest.ContentType = "application/json";
-
-            if(!SetPostData(webRequest, buffer))
+            WebRequest webRequest = CreateWebRequest(api, EHTTP_METHOD.POST, req);
+            if(webRequest == null)
             {
-                Log.Write("포스트 데이터 세팅 실패!");
+                Log.Write("WebRequest({0}({1})) 생성 실패", api, req.ToString());
                 return;
             }
+
             // Request Data 만들기 <<--
 
-            Request<Rpy_SignUp>(webRequest, recv_Rpy_SignUp);
+            m_requestFunc(webRequest);
             Log.Write("Send_Req_SignIn 끝 <<---------");
         }
 
@@ -228,6 +235,61 @@ namespace Project_Chat
             }
         }
         #endregion API
+
+        WebRequest CreateWebRequest(string api, EHTTP_METHOD eHttpMethod, Model model)
+        {
+            string url = string.Format(r_domain, api);
+            WebRequest webRequest = null;
+            switch (eHttpMethod)
+            {
+                case EHTTP_METHOD.GET:
+                    {
+                        webRequest = CreateWebRequest_Get(url, model);
+                    }
+                    break;
+                case EHTTP_METHOD.POST:
+                    {
+                        webRequest = CreateWebRequest_Post(url, model);
+                    }
+                    break;
+                default:
+                    {
+
+                    }
+                    break;
+            }
+            return webRequest;
+        }
+
+        WebRequest CreateWebRequest_Post(string url, Model model)
+        {   
+            WebRequest webRequest = WebRequest.Create(url);
+            webRequest.Method = r_method[(int)EHTTP_METHOD.POST];
+            webRequest.Credentials = CredentialCache.DefaultCredentials;
+            webRequest.ContentType = c_contentType;
+
+            string json = JsonConvert.SerializeObject(model);
+            byte[] buffer = Encoding.UTF8.GetBytes(json);
+
+            if (!SetPostData(webRequest, buffer))
+            {
+                Log.Write("포스트 데이터 세팅 실패!");
+                return null;
+            }
+
+            return webRequest;
+        }
+
+        WebRequest CreateWebRequest_Get(string url, Model model)
+        {
+            string urlWithParam = url + model.ToString();
+            WebRequest webRequest = WebRequest.Create(urlWithParam);
+            webRequest.Method = r_method[(int)EHTTP_METHOD.GET];
+            webRequest.Credentials = CredentialCache.DefaultCredentials;
+            webRequest.ContentType = c_contentType;
+
+            return webRequest;
+        }
 
         bool SetPostData(WebRequest request, byte[] postParam)
         {

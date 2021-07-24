@@ -1,22 +1,13 @@
 ﻿namespace Project_Chat
 {
-    public abstract class Net<T> where T : class, new()
+    public abstract class Net<T> : Singleton<T> where T : class, new()
     {
-        static protected T s_instance = null;
-
-        protected bool isWait = false;
         protected abstract string c_domain_base { get; }
+        static public string Domain { get { return s_instance == null ? string.Empty : (s_instance as Net<T>).c_domain_base; } }
 
-        static public void Create()
+        protected Net() : base()
         {
-            if (s_instance == null)
-                s_instance = new T();
-        }
 
-        static public void Release()
-        {
-            if (s_instance != null)
-                s_instance = null;
         }
     }
 }
