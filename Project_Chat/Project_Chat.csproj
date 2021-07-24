@@ -58,6 +58,8 @@
     <Compile Include="NetManager_ASP.cs" />
     <Compile Include="NetManager_ASP.static.cs" />
     <Compile Include="NetManager_WS.static.cs" />
+    <Compile Include="NetWS.cs" />
+    <Compile Include="Singleton.cs" />
     <Compile Include="TimeManager.cs" />
     <Compile Include="UserData_Account.cs" />
     <Compile Include="NetManager_WS.cs" />

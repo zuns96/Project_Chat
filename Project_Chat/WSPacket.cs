@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ASPDotNetCore
+﻿namespace ASPDotNetCore
 {
     static public class WSPacket
     {
@@ -19,6 +14,8 @@ namespace ASPDotNetCore
         {
             FAILURE = 0,        // 실패
             SUCCESS = 1,        // 성공
+
+            MAX,
         }
 
         public class CommonHeader
@@ -40,13 +37,14 @@ namespace ASPDotNetCore
 
         public class Rpy_Login
         {
+            public byte byRet { get; set; }
             public long lUserNo { get; set; }
             public string strUserName { get; set; }
         }
 
         public enum ERROR_MSG_LOGIN
         {
-            DUPLICATE_ACCOUNT = 2,  // 계정 중복
+            DUPLICATE_LOGIN = 2,  // 로그인 중복
             INVALID_PASSWORD = 3,   // 유효하지 않는 패스워드
         }
 
@@ -60,6 +58,7 @@ namespace ASPDotNetCore
 
         public class Rpy_Chat
         {
+            public byte byRet { get; set; }
             public long lUserNo { get; set; }
             public string strSender { get; set; }
             public string strMsg { get; set; }

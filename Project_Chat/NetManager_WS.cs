@@ -1,113 +1,44 @@
-﻿using System;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Net.WebSockets;
+﻿using System.Windows.Forms;
 using Newtonsoft.Json;
 using static ASPDotNetCore.WSPacket;
 
 namespace Project_Chat
 {
-    public partial class NetManager_WS : Net<NetManager_WS>
+    public partial class NetManager_WS : Singleton<NetManager_WS>
     {
-        protected override string c_domain_base { get { return "ws://localhost:6038/ws"; } }
+        public delegate void PacketFunc(Packet packet);
 
-        ClientWebSocket m_clientWebSocket = null;
+        PacketFunc m_packetFunc = null;
 
         public NetManager_WS() : base()
         {
             
         }
 
-        static public void Connect()
+        void addListener_PacketFunc(PacketFunc func)
         {
-            if (s_instance != null)
-                s_instance.connect();
-        }
-        
-        static public void Disconnect()
-        {
-            if (s_instance != null)
-                s_instance.disconnect();
+            m_packetFunc += func;
         }
 
-        private void connect()
+        void removeListener_PacketFunc(PacketFunc func)
         {
-            m_clientWebSocket = new ClientWebSocket();
-            ClientWebSocketOptions webSocketOptions = m_clientWebSocket.Options;
-            webSocketOptions.KeepAliveInterval = TimeSpan.FromSeconds(120);
+            m_packetFunc -= func;
+        }
 
-            ConnectWebSocketClient();
-            while(m_clientWebSocket.State != WebSocketState.Open)
+        void ErrorMessage_Common(byte byRet)
+        {
+            string msg = string.Empty;
+            switch ((ERROR_MSG_COMMON)byRet)
             {
-                Log.Write("웹 소켓 연결 중...");
-                Thread.Sleep(100);
+                case ERROR_MSG_COMMON.FAILURE:
+                    {
+                        msg = "실패 하였습니다.";
+                    }
+                    break;
             }
 
-            ProcessWebSocketClient();
-        }
-
-        private void disconnect()
-        {
-            m_clientWebSocket.CloseAsync(WebSocketCloseStatus.Empty, string.Empty, CancellationToken.None).Wait();
-            m_clientWebSocket.Dispose();
-            m_clientWebSocket = null;
-            Log.Write("웹 소켓 연결 중지");
-        }
-
-        private void ConnectWebSocketClient()
-        {
-            Uri serverUri = new Uri(c_domain_base);
-            Log.Write("웹 소켓 연결 시작, webScoketServer : {0}", serverUri.AbsoluteUri);
-            m_clientWebSocket.ConnectAsync(serverUri, CancellationToken.None).ContinueWith((task) =>
-            {
-                if(m_clientWebSocket.State == WebSocketState.Open)
-                    Log.Write("웹 소켓 연결 완료...");
-            });
-        }
-
-        private async void ProcessWebSocketClient()
-        {
-            ArraySegment<byte> buffer = new ArraySegment<byte>(new byte[1024 * 1024 * 10]);
-            WebSocketReceiveResult result = null;
-            while (m_clientWebSocket.State == WebSocketState.Open)
-            {
-                try
-                {
-                    result = await m_clientWebSocket.ReceiveAsync(buffer, CancellationToken.None);
-                }
-                catch (Exception ex)
-                {
-                    Log.Write("#### Exception!!! THROWN ####");
-                    Log.Write(ex.Message);
-                    Log.Write(ex.StackTrace);
-                    Log.Write("#### Exception!!! THROWN ####");
-                    continue;
-                }
-
-                string json = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
-
-                Packet packet = JsonConvert.DeserializeObject<Packet>(json);
-                switch(packet.hd.iRmiID)
-                { 
-                    case (int)E_RMIID.E_RMIID_RPY_LOGIN:
-                        {
-                            Rpy_Login rpy = JsonConvert.DeserializeObject<Rpy_Login>(packet.strJson);
-                            ChatApplicationContext.Recv_Rpy_Login(rpy);
-                        }
-                        break;
-                    case (int)E_RMIID.E_RMIID_RPY_CHAT:
-                        {
-                            Rpy_Chat rpy = JsonConvert.DeserializeObject<Rpy_Chat>(packet.strJson);
-                            ChatApplicationContext.Recv_Rpy_Chat(rpy);
-                        }
-                        break;
-                }
-            }
-
-            Log.Write("웹 소켓 프로세스 종료");
-
-            WindowManager.OpenWindow<WinFormLogin>();
+            Log.Write(msg);
+            MessageBox.Show(msg);
         }
 
         void send_Req_Login(long lUserNo, string strUserName)
@@ -125,8 +56,44 @@ namespace Project_Chat
             packet.hd = hd;
             packet.strJson = json;
 
-            Send(packet);
+            m_packetFunc(packet);
             Log.Write("Send_Req_Login 끝 <<---------");
+        }
+
+        void recv_Rpy_Login(Rpy_Login rpy)
+        {
+            Log.Write("Recv_Rpy_Login 시작 --------->>");
+            byte byRet = rpy.byRet;
+            if (byRet == (byte)ERROR_MSG_COMMON.SUCCESS)
+            {
+                ChatApplicationContext.Recv_Rpy_Login(rpy);
+            }
+            else
+            {
+                ErrorMessage_Rpy_Login(byRet);
+            }
+            Log.Write("Recv_Rpy_Login 끝 <<---------");
+        }
+
+        void ErrorMessage_Rpy_Login(byte byRet)
+        {
+            if (byRet >= (byte)ERROR_MSG_COMMON.FAILURE && byRet < (byte)ERROR_MSG_COMMON.MAX)
+            {
+                ErrorMessage_Common(byRet);
+            }
+            else
+            {
+                string msg = string.Empty;
+                switch ((ERROR_MSG_LOGIN)byRet)
+                {
+
+                }
+
+                Log.Write(msg);
+                MessageBox.Show(msg);
+            }
+
+            NetWS.Disconnect();
         }
 
         void send_Req_Chat(long lUserNo, string strUserName, string strMsg, long lTimeStamp)
@@ -146,15 +113,42 @@ namespace Project_Chat
             packet.hd = hd;
             packet.strJson = json;
 
-            Send(packet);
+            m_packetFunc(packet);
             Log.Write("Send_Req_Chat 끝 <<---------");
         }
 
-        void Send(Packet packet)
+        void recv_Rpy_Chat(Rpy_Chat rpy)
         {
-            string json = JsonConvert.SerializeObject(packet);
-            ArraySegment<byte> buffer = new ArraySegment<byte>(Encoding.UTF8.GetBytes(json));
-            m_clientWebSocket.SendAsync(buffer, WebSocketMessageType.Binary, true, CancellationToken.None).Wait();
+            Log.Write("Recv_Rpy_Chat 시작 --------->>");
+            byte byRet = rpy.byRet;
+            if (byRet == (byte)ERROR_MSG_COMMON.SUCCESS)
+            {
+                ChatApplicationContext.Recv_Rpy_Chat(rpy);
+            }
+            else
+            {
+                ErrorMessage_Rpy_Chat(byRet);
+            }
+            Log.Write("Recv_Rpy_Chat 끝 <<---------");
+        }
+
+        void ErrorMessage_Rpy_Chat(byte byRet)
+        {
+            if (byRet >= (byte)ERROR_MSG_COMMON.FAILURE && byRet < (byte)ERROR_MSG_COMMON.MAX)
+            {
+                ErrorMessage_Common(byRet);
+            }
+            else
+            {
+                string msg = string.Empty;
+                switch ((ERROR_MSG_CHAT)byRet)
+                {
+
+                }
+
+                Log.Write(msg);
+                MessageBox.Show(msg);
+            }
         }
     }
 }

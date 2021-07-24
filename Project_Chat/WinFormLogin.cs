@@ -1,5 +1,4 @@
-﻿using ASPDotNetCore.Models;
-using System;
+﻿using System;
 using System.Windows.Forms;
 using static ASPDotNetCore.WSPacket;
 using static ASPDotNetCore.ASPPacket;
@@ -49,7 +48,7 @@ namespace Project_Chat
             string strUserName = rpy.strUserName;
 
             UserData_Account.Create(lUserNo, strUserName);
-            NetManager_WS.Connect();
+            NetWS.Connect();
 
             NetManager_WS.Send_Req_Login(lUserNo, strUserName);
         }
@@ -60,7 +59,7 @@ namespace Project_Chat
             string strUserName = rpy.strUserName;
 
             UserData_Account.Create(lUserNo, strUserName);
-            NetManager_WS.Connect();
+            NetWS.Connect();
 
             NetManager_WS.Send_Req_Login(lUserNo, strUserName);
         }

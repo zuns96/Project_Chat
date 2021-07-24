@@ -31,7 +31,7 @@ namespace Project_Chat
         private void WinFormChat_Deactivate(object sender, EventArgs e)
         {
             UserData_Account.Release();
-            NetManager_WS.Disconnect();
+            NetWS.Disconnect();
             WindowManager.OpenWindow<WinFormLogin>();
         }
 
