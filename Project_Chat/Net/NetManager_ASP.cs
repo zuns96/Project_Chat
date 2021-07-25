@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using static ASPDotNetCore.ASPPacket;
 
-namespace Project_Chat
+namespace Project_Chat.Net
 {
     public partial class NetManager_ASP : Singleton<NetManager_ASP>
     {

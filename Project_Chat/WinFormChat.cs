@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Project_Chat.Net;
 using static ASPDotNetCore.WSPacket;
 
 namespace Project_Chat
@@ -28,11 +29,13 @@ namespace Project_Chat
             textMsg.Text = string.Empty;
         }
 
-        private void WinFormChat_Deactivate(object sender, EventArgs e)
+        protected override void OnFormClosed(FormClosedEventArgs e)
         {
             UserData_Account.Release();
             NetWS.Disconnect();
             WindowManager.OpenWindow<WinFormLogin>();
+
+            base.OnFormClosed(e);
         }
 
         public void Recv_Rpy_Chat(Rpy_Chat rpy)

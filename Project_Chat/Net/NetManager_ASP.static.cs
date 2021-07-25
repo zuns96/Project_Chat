@@ -1,6 +1,6 @@
 ﻿using static ASPDotNetCore.ASPPacket;
 
-namespace Project_Chat
+namespace Project_Chat.Net
 {
     public partial class NetManager_ASP
     {

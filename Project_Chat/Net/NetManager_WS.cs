@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using static ASPDotNetCore.WSPacket;
 
-namespace Project_Chat
+namespace Project_Chat.Net
 {
     public partial class NetManager_WS : Singleton<NetManager_WS>
     {

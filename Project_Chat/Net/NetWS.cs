@@ -6,11 +6,11 @@ using Newtonsoft.Json;
 using static ASPDotNetCore.WSPacket;
 
 
-namespace Project_Chat
+namespace Project_Chat.Net
 {
     public class NetWS : Net<NetWS>
     {
-        protected override string c_domain_base { get { return "ws://localhost:6038/ws"; } }
+        protected override string c_domain_base { get { return "ws://zuns96.iptime.org:12502/ws"; } }
 
         ClientWebSocket m_clientWebSocket = null;
 
@@ -85,11 +85,12 @@ namespace Project_Chat
             ArraySegment<byte> buffer = new ArraySegment<byte>(new byte[1024 * 1024]);
             WebSocketReceiveResult result = null;
             WebSocketState state = WebSocketState.None;
-            while ((state = m_clientWebSocket.State) == WebSocketState.Open)
+            do
             {
                 try
                 {
                     result = await m_clientWebSocket.ReceiveAsync(buffer, CancellationToken.None);
+                    state = m_clientWebSocket.State;
                 }
                 catch (Exception ex)
                 {
@@ -97,7 +98,6 @@ namespace Project_Chat
                     Log.Write(ex.Message);
                     Log.Write(ex.StackTrace);
                     Log.Write("#### Exception!!! THROWN ####");
-                    continue;
                 }
 
                 if (state == WebSocketState.Open)
@@ -121,7 +121,7 @@ namespace Project_Chat
                             break;
                     }
                 }
-            }
+            } while (state == WebSocketState.Open) ;
 
             Log.Write("웹 소켓 프로세스 종료");
 

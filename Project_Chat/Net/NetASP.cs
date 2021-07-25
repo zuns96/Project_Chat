@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using static ASPDotNetCore.ASPPacket;
 
-namespace Project_Chat
+namespace Project_Chat.Net
 {
     public class NetASP : Net<NetASP>
     {
@@ -16,7 +16,7 @@ namespace Project_Chat
 
         private RecvResponse m_delegate = null;
 
-        protected override string c_domain_base { get { return "http://localhost:6038{0}"; } }
+        protected override string c_domain_base { get { return "http://zuns96.iptime.org:12502{0}"; } }
 
         public NetASP() : base()
         {

@@ -52,17 +52,17 @@
     <Compile Include="ChatApplicationContext.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Models\HelloWorld.cs" />
-    <Compile Include="ASPPacket.cs" />
+    <Compile Include="ASPDotNetCore\ASPPacket.cs" />
     <Compile Include="Net.cs" />
-    <Compile Include="NetASP.cs" />
-    <Compile Include="NetManager_ASP.cs" />
-    <Compile Include="NetManager_ASP.static.cs" />
-    <Compile Include="NetManager_WS.static.cs" />
-    <Compile Include="NetWS.cs" />
+    <Compile Include="Net\NetASP.cs" />
+    <Compile Include="Net\NetManager_ASP.cs" />
+    <Compile Include="Net\NetManager_ASP.static.cs" />
+    <Compile Include="Net\NetManager_WS.static.cs" />
+    <Compile Include="Net\NetWS.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="TimeManager.cs" />
     <Compile Include="UserData_Account.cs" />
-    <Compile Include="NetManager_WS.cs" />
+    <Compile Include="Net\NetManager_WS.cs" />
     <Compile Include="WindowManager.cs" />
     <Compile Include="WinFormChat.cs">
       <SubType>Form</SubType>
@@ -78,7 +78,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WSPacket.cs" />
+    <Compile Include="ASPDotNetCore\WSPacket.cs" />
     <EmbeddedResource Include="WinFormChat.resx">
       <DependentUpon>WinFormChat.cs</DependentUpon>
     </EmbeddedResource>

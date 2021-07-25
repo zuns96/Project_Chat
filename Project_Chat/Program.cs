@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Project_Chat.Net;
 
 namespace Project_Chat
 {
